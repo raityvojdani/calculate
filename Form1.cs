@@ -2,23 +2,31 @@
 
 namespace calculate;
 
+/// <summary>
+/// Represents the main form of the application.
+/// </summary>
 public partial class Form1 : Form
 {
-    ICalculate calculate;
+    private readonly ICalculate _calculate;
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="Form1"/> class.
+    /// </summary>
     public Form1()
     {
         InitializeComponent();
-        calculate = new Calculate();
+        _calculate = new Calculate();
     }
 
     private void Form1_Load(object sender, EventArgs e)
     {
-
     }
 
-    
-
-    bool validateInputs()
+    /// <summary>
+    /// Validates the input values.
+    /// </summary>
+    /// <returns>True if inputs are valid; otherwise, false.</returns>
+    private bool ValidateInputs()
     {
         bool isValid = true;
 
@@ -27,13 +35,10 @@ public partial class Form1 : Form
             isValid = false;
             MessageBox.Show("عدد اول را وارد کنید  ");
         }
-        else
+        else if (txtNumber2.Value == 0)
         {
-            if (txtNumber2.Value == 0)
-            {
-                isValid = false;
-                MessageBox.Show("عدد دوم را وارد کنید  ");
-            }
+            isValid = false;
+            MessageBox.Show("عدد دوم را وارد کنید  ");
         }
 
         return isValid;
@@ -41,38 +46,44 @@ public partial class Form1 : Form
 
     private void btnMultiple_Click(object sender, EventArgs e)
     {
-        if (validateInputs())
+        if (ValidateInputs())
         {
-           int multiple= calculate.Multiple((int)txtNumber1.Value, (int)txtNumber2.Value);
+            int multiple = _calculate.Multiple((int)txtNumber1.Value, (int)txtNumber2.Value);
             MessageBox.Show($"Multiple is :{multiple}");
         }
     }
 
     private void btnDivide_Click(object sender, EventArgs e)
     {
-        if (validateInputs())
+        if (ValidateInputs())
         {
-           int divide= calculate.Divide((int)txtNumber1.Value, (int)txtNumber2.Value);
-            MessageBox.Show($"Divide is :{divide}");
+            try
+            {
+                int divide = _calculate.Divide((int)txtNumber1.Value, (int)txtNumber2.Value);
+                MessageBox.Show($"Divide is :{divide}");
+            }
+            catch (DivideByZeroException ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
         }
     }
 
     private void btnMinus_Click(object sender, EventArgs e)
     {
-        if (validateInputs())
+        if (ValidateInputs())
         {
-           int minus= calculate.Minus((int)txtNumber1.Value, (int)txtNumber2.Value);
+            int minus = _calculate.Minus((int)txtNumber1.Value, (int)txtNumber2.Value);
             MessageBox.Show($"Minus is :{minus}");
         }
     }
 
     private void btnPlus_Click(object sender, EventArgs e)
     {
-        if (validateInputs())
+        if (ValidateInputs())
         {
-           int plus= calculate.Plus((int)txtNumber1.Value, (int)txtNumber2.Value);
+            int plus = _calculate.Plus((int)txtNumber1.Value, (int)txtNumber2.Value);
             MessageBox.Show($"Plus is :{plus}");
         }
-
     }
 }
